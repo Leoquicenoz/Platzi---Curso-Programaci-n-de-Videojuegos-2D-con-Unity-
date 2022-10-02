@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     float horizontalAxis, verticalAxis;
     Vector3 moveDirection;
-    
+
     [SerializeField] float speed = 3;   //Serializefield sirve para poner una variable editable desde unity
     [SerializeField] Transform aim;
     [SerializeField] Camera camera;
@@ -15,11 +15,14 @@ public class Player : MonoBehaviour
     bool gunLoaded = true;
     [SerializeField] float fireRate = 1;
     [SerializeField] int health = 10;
+    bool powerShotEnable;
+    bool invulnerable;
+    [SerializeField] float invulnerableTime = 3;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -46,7 +49,13 @@ public class Player : MonoBehaviour
             float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;    //creamos una variable en la que se guardara el angulo de la mira
                                                                                                 //y que la bala salga dirigida en ese sentido (se pasa a grados con Mathf.Rad2Deg
             Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            Instantiate(bulletPrefab, transform.position, targetRotation); //Crea la bala a partir del prefab que tenemos en los assets
+            Transform bulletClone = Instantiate(bulletPrefab, transform.position, targetRotation); //Crea la bala a partir del prefab que tenemos en los assets
+
+            if (powerShotEnable)
+            {
+                bulletClone.GetComponent<Bullet>().powerShot = true;
+            }
+
             StartCoroutine(ReloadGun());
         }
 
@@ -54,16 +63,47 @@ public class Player : MonoBehaviour
 
     IEnumerator ReloadGun()
     {
-        yield return new WaitForSeconds(1/fireRate);
+        yield return new WaitForSeconds(1 / fireRate);
         gunLoaded = true;
     }
 
     public void TakeDamage()
     {
+        if (invulnerable)
+            return;
+
         health--;
+        invulnerable = true;
+        StartCoroutine(MakeVulnerableAgain());
         if (health <= 0)
         {
             // Game Over
         }
+    }
+
+    IEnumerator MakeVulnerableAgain()
+    {
+        yield return new WaitForSeconds(invulnerableTime);
+        invulnerable=false;
+    }
+
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PowerUp"))
+        {
+            switch (collision.GetComponent<PowerUp>().powerUpType)
+            {
+                case PowerUp.PowerUpType.FireRateIncrease:
+                    fireRate++;
+                    break;
+
+                case PowerUp.PowerUpType.PowerShot:
+                    powerShotEnable = true;
+                    break;
+            }
+            Destroy(collision.gameObject, 0.1f);
+        }
+
     }
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; //Creamos una variable de tipo Gamemanager llamada Instance (no es obligatorio ese nombre, pero es lo que se utiliza normalmente)
-    [SerializeField] int time = 30;
+    public int time = 30;
+    public int difficulty = 1;
 
     void Awake()
     {

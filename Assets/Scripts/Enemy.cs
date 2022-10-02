@@ -12,6 +12,12 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>().transform;  //Busca al Player y obtiene su transform, luego se almacena en la variable
+        GameObject[] spawnPoint = GameObject.FindGameObjectsWithTag("SpawnPoint"); //Se buscas todos los objetos que tengan como tag SpawnPoint
+                                                                                   //y se meten en el arreglo (se tendria una lista)
+        int randomSpawnPoint = Random.Range(0, spawnPoint.Length);
+        transform.position = spawnPoint[randomSpawnPoint].transform.position;   //Apareceran enemigos de cualquier spawnpoint creado
+
+
     }
 
     // Update is called once per frame
