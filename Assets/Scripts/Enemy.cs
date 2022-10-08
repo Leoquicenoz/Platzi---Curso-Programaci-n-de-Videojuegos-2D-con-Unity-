@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] int health = 1;
     Transform player;
     [SerializeField] float speed = 1;
+    [SerializeField] int scorePoints = 100;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
         health--;
         if (health <= 0)
         {
+            GameManager.Instance.Score += scorePoints;
             Destroy(gameObject);    //Si la salud llega a 0, destruir el enemigo
         }
     }

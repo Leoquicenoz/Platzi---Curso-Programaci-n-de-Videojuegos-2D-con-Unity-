@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     float horizontalAxis, verticalAxis;
     Vector3 moveDirection;
 
-    [SerializeField] float speed = 3;   //Serializefield sirve para poner una variable editable desde unity
+    public float speed = 3;   //Serializefield sirve para poner una variable editable desde unity
     [SerializeField] Transform aim;
     [SerializeField] Camera camera;
     Vector2 facingDirection;
@@ -18,6 +18,18 @@ public class Player : MonoBehaviour
     bool powerShotEnable;
     bool invulnerable;
     [SerializeField] float invulnerableTime = 3;
+
+    public int Health 
+    {
+        get => health;
+        set
+        {
+            health = value;
+            UIManager.Instance.UpdateUIHealth(health);
+        }
+    
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -72,12 +84,13 @@ public class Player : MonoBehaviour
         if (invulnerable)
             return;
 
-        health--;
+        Health--;
         invulnerable = true;
         StartCoroutine(MakeVulnerableAgain());
-        if (health <= 0)
+        if (Health <= 0)
         {
-            // Game Over
+            GameManager.Instance.gameOver = true;
+            UIManager.Instance.ShowGameOverScreen();
         }
     }
 
