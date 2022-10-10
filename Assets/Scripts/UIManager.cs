@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] Text finalScore;
 
+
     void Awake()
     {
         if (Instance == null)
@@ -24,26 +25,26 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void UpdateUIScore (int newScore)
+    public void UpdateUIScore(int newScore)
     {
         scoreText.text = newScore.ToString();   //pasamos de entero a string
     }
 
-    public void UpdateUIHealth (int newHealth)
+    public void UpdateUIHealth(int newHealth)
     {
         healthText.text = newHealth.ToString();
     }
 
-    public void UpdateUIHTime (int newTime)
+    public void UpdateUITime(int newTime)
     {
         timeText.text = newTime.ToString();
     }
@@ -51,6 +52,8 @@ public class UIManager : MonoBehaviour
     public void ShowGameOverScreen()
     {
         gameOverScreen.SetActive(true); //Activamos la pantalla de Gameover
-        finalScore.text = "SCORE: " + GameManager.Instance.Score;
+        finalScore.text = "" + GameManager.Instance.Score;
+
     }
+
 }

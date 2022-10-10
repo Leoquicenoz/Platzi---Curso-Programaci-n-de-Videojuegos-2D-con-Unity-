@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     Transform player;
     [SerializeField] float speed = 1;
     [SerializeField] int scorePoints = 100;
+    [SerializeField] AudioClip impactClip;
 
     // Start is called before the first frame update
     void Start()
@@ -25,16 +26,17 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         Vector2 direction = player.position - transform.position;   //Se obtiene la dirección hacia donde se debe mover el enemigo para encontrarse con el player
-        transform.position += (Vector3)direction * Time.deltaTime * speed;
+        transform.position += (Vector3)direction.normalized * Time.deltaTime * speed;
     }
 
     public void TakeDamage()    //Metodo para reducir la vida del enemigo
     {
         health--;
+        AudioSource.PlayClipAtPoint(impactClip, transform.position);
         if (health <= 0)
         {
             GameManager.Instance.Score += scorePoints;
-            Destroy(gameObject);    //Si la salud llega a 0, destruir el enemigo
+            Destroy(gameObject, 0.1f);    //Si la salud llega a 0, destruir el enemigo
         }
     }
 

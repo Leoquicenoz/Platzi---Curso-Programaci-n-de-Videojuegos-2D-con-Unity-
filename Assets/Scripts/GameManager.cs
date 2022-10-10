@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(CountDownRoutine());    //Llamamos la rutina paralela
+        UIManager.Instance.UpdateUIScore(score);
     }
 
     // Update is called once per frame
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1); //mientras el tiempo sea mayor a cero, se espera un segundo para disminuir la variable tiempo
             time--;
+            UIManager.Instance.UpdateUITime(time);  // Se envía el valor de time a la función UpdateUITime
         }
         gameOver = true;
         UIManager.Instance.ShowGameOverScreen();
@@ -61,5 +63,6 @@ public class GameManager : MonoBehaviour
     public void PlayAgain()
     {
         SceneManager.LoadScene("Game"); //Se carga una scena desde el SceneManager para reiniciar el juego
+        
     }
 }
